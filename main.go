@@ -9,10 +9,10 @@ import (
 
 var msgChannel chan string
 
-func getTime(w http.ResponseWriter, r *http.Request) {
+func getTimeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*") //cors
 	if msgChannel != nil {
-		msg := time.Now().Format("15:05:05")
+		msg := time.Now().Format("15:04:05")
 		msgChannel <- msg
 	}
 }
@@ -53,6 +53,6 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	router := http.NewServeMux()
 	router.HandleFunc("/event", sseHandler)
-	router.HandleFunc("/time", getTime)
+	router.HandleFunc("/time", getTimeHandler)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
