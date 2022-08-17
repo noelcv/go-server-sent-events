@@ -1,32 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { useState, useEffect, useRef, FunctionComponent, MutableRefObject } from 'react'
+
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App: FunctionComponent = () => {
+  const [time, setTime] = useState<string>('')
+  const eventSrcRef = useRef<EventSource | null>(null);
+  
+  const getTime = async () => {
+    try {
+      console.log('getting time')
+      const res = await fetch("http://localhost:8080/time");
+      console.log(res, "timmeeeeee")
+      return res;
+    } catch(err) {
+      console.log("error fetching time: ", err)
+    }
+  }
+  
+  useEffect(() => {
+    eventSrcRef.current = new EventSource("http://localhost:8080/event")
+    console.log(eventSrcRef.current, "eventSrcRef.current");
+    eventSrcRef.current.onmessage = function(e) {
+      console.log(e.data, "e.data");
+      setTime(e.data)
+    }
+    
+    eventSrcRef.current.onerror = function (e) {
+      console.log('Could not get the time', e)
+    }
+    
+  }, [])
+  
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Server-Sent Events</h1>
+      <button onClick={getTime}>Get Time</button>
+      <h2>{time}</h2>
+      
     </div>
   )
 }
