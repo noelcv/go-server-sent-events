@@ -8,13 +8,12 @@ const App: FunctionComponent = () => {
   
   useEffect(() => {
     eventSrcRef.current = new EventSource("http://localhost:8080/event")
-    console.log(eventSrcRef.current, "EventSrcRef.current");
     eventSrcRef.current.onmessage = (e) => {
       setTime(e.data)
     }
     
     eventSrcRef.current.onerror = (e) => {
-      console.log('Could not get the time', e)
+      console.log('Could not get the time:', e)
     }
     
     //clean up function
