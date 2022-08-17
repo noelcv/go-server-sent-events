@@ -1,34 +1,24 @@
 import { useState, useEffect, useRef, FunctionComponent, MutableRefObject } from 'react'
-
+import { getTime } from './utils/getTime'
 import './App.css'
 
 const App: FunctionComponent = () => {
   const [time, setTime] = useState<string>('')
   const eventSrcRef = useRef<EventSource | null>(null);
   
-  const getTime = async () => {
-    try {
-      console.log('getting time')
-      const res = await fetch("http://localhost:8080/time");
-      console.log(res, "timmeeeeee")
-      return res;
-    } catch(err) {
-      console.log("error fetching time: ", err)
-    }
-  }
-  
   useEffect(() => {
     eventSrcRef.current = new EventSource("http://localhost:8080/event")
-    console.log(eventSrcRef.current, "eventSrcRef.current");
-    eventSrcRef.current.onmessage = function(e) {
-      console.log(e.data, "e.data");
+    console.log(eventSrcRef.current, "EventSrcRef.current");
+    eventSrcRef.current.onmessage = (e) => {
       setTime(e.data)
     }
     
-    eventSrcRef.current.onerror = function (e) {
+    eventSrcRef.current.onerror = (e) => {
       console.log('Could not get the time', e)
     }
     
+    //clean up function
+    return () => eventSrcRef.current?.close()
   }, [])
   
   return (
