@@ -1,7 +1,6 @@
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 2.5em;
-  color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #007D9C;
 }
@@ -29,14 +28,4 @@ button:hover {
 
 button:active {
   outline: 4px auto #646cff;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
