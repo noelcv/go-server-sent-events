@@ -27,8 +27,7 @@ button:hover {
   border-color: #646cff;
 }
 
-button:focus,
-button:focus-visible {
+button:active {
   outline: 4px auto #646cff;
 }
 
@@ -36,9 +35,6 @@ button:focus-visible {
   :root {
     color: #213547;
     background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
   }
   button {
     background-color: #f9f9f9;
